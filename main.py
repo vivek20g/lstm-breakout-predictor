@@ -1,8 +1,8 @@
-"""main.py — pipeline orchestration (concise)."""
+"""main.py — run pipeline using the LSTMModelTrainer."""
 
 import pandas as pd
 from features import add_price_dynamics, add_technical_indicators, label_intraday_trade
-from model import build_lstm_model, prepare_sequences, compute_class_weights, train_model, evaluate_model
+from model import LSTMModelTrainer
 
 
 def main():
@@ -18,19 +18,19 @@ def main():
     time_features = ['HourOfDay', 'OrderMonth', 'GoldenCrossover']
 
     sequence_length = 9
-    Xp, Xi, Xt, y_train = prepare_sequences(df, price_features, indicator_features, time_features, sequence_length)
+    trainer = LSTMModelTrainer(sequence_length=sequence_length)
 
-    class_weights = compute_class_weights(y_train)
+    Xp, Xi, Xt, y = trainer.preprocess(df, price_features, indicator_features, time_features)
 
-    model = build_lstm_model(sequence_length, len(price_features), len(indicator_features), len(time_features))
-    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    trainer.build_model(price_dim=len(price_features), indicator_dim=len(indicator_features), time_dim=len(time_features))
+    trainer.compile()
 
-    history = train_model(model, Xp, Xi, Xt, y_train, class_weights)
+    trainer.fit(Xp, Xi, Xt, y)
 
-    val_size = int(len(y_train) * 0.3)
-    evaluate_model(model, Xp[-val_size:], Xi[-val_size:], Xt[-val_size:], y_train[-val_size:])
+    val_size = int(len(y) * 0.3)
+    trainer.evaluate(Xp[-val_size:], Xi[-val_size:], Xt[-val_size:], y[-val_size:])
 
-    model.save("model/daytrading_breakout_model.keras")
+    trainer.save()
 
 
 if __name__ == "__main__":
