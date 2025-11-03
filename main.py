@@ -1,36 +1,52 @@
-"""main.py — run pipeline using the LSTMModelTrainer and FeatureEngineer."""
+"""main.py — top-level orchestrator that composes generator and model packages."""
 
+import argparse
 import pandas as pd
-from features import FeatureEngineer
-from model import LSTMModelTrainer
+from generator import generate_dataset
+from model.pipeline import LSTMModelTrainer
 
 
 def main():
-    df = pd.read_excel("data/ExecutionData_Sample.xlsx", engine="openpyxl")
-    df = df.sort_values(by="ExecutionDate")
+    p = argparse.ArgumentParser()
+    p.add_argument('--generate', action='store_true')
+    p.add_argument('--train', action='store_true')
+    p.add_argument('--excel', default='generator/data/NiftyPrice.xlsx')
+    p.add_argument('--sheet', default='HDFCBANK')
+    p.add_argument('--out', default='generator/output/simulated_trades.csv')
+    args = p.parse_args()
 
-    fe = FeatureEngineer()
-    df = fe.run(df)
+    data_path = args.out
 
-    price_features = ['Entry_vs_PrevClose', 'EntryPriceChange', 'volatility']
-    indicator_features = ['EMA_10', 'EMA_20', 'MA50', 'BB_Width', 'RSI', 'Momentum', 'ATR']
-    time_features = ['HourOfDay', 'OrderMonth', 'GoldenCrossover']
+    if args.generate:
+        print('Generating simulated dataset...')
+        generate_dataset(args.excel, data_path, args.sheet)
 
-    sequence_length = 9
-    trainer = LSTMModelTrainer(sequence_length=sequence_length)
+    if args.train:
+        print('Loading dataset for training...')
+        df = pd.read_csv(data_path)
+        df = df.sort_values(by='ExecutionDate')
 
-    Xp, Xi, Xt, y = trainer.preprocess(df, price_features, indicator_features, time_features)
+        fe = __import__('features.engineer', fromlist=['FeatureEngineer']).FeatureEngineer()
+        df = fe.run(df)
 
-    trainer.build_model(price_dim=len(price_features), indicator_dim=len(indicator_features), time_dim=len(time_features))
-    trainer.compile()
+        price_features = ['Entry_vs_PrevClose', 'EntryPriceChange', 'volatility']
+        indicator_features = ['EMA_10', 'EMA_20', 'MA50', 'BB_Width', 'RSI', 'Momentum', 'ATR']
+        time_features = ['HourOfDay', 'OrderMonth', 'GoldenCrossover']
 
-    trainer.fit(Xp, Xi, Xt, y)
+        sequence_length = 9
+        trainer = LSTMModelTrainer(sequence_length=sequence_length)
 
-    val_size = int(len(y) * 0.3)
-    trainer.evaluate(Xp[-val_size:], Xi[-val_size:], Xt[-val_size:], y[-val_size:])
+        Xp, Xi, Xt, y = trainer.preprocess(df, price_features, indicator_features, time_features)
 
-    trainer.save()
+        trainer.build_model(price_dim=len(price_features), indicator_dim=len(indicator_features), time_dim=len(time_features))
+        trainer.compile()
 
+        trainer.fit(Xp, Xi, Xt, y)
 
-if __name__ == "__main__":
+        val_size = int(len(y) * 0.3)
+        trainer.evaluate(Xp[-val_size:], Xi[-val_size:], Xt[-val_size:], y[-val_size:])
+
+        trainer.save()
+
+if __name__ == '__main__':
     main()
