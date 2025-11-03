@@ -1,7 +1,7 @@
-"""main.py — run pipeline using the LSTMModelTrainer."""
+"""main.py — run pipeline using the LSTMModelTrainer and FeatureEngineer."""
 
 import pandas as pd
-from features import add_price_dynamics, add_technical_indicators, label_intraday_trade
+from features import FeatureEngineer
 from model import LSTMModelTrainer
 
 
@@ -9,9 +9,8 @@ def main():
     df = pd.read_excel("data/ExecutionData_Sample.xlsx", engine="openpyxl")
     df = df.sort_values(by="ExecutionDate")
 
-    df = add_price_dynamics(df)
-    df = add_technical_indicators(df)
-    df = label_intraday_trade(df)
+    fe = FeatureEngineer()
+    df = fe.run(df)
 
     price_features = ['Entry_vs_PrevClose', 'EntryPriceChange', 'volatility']
     indicator_features = ['EMA_10', 'EMA_20', 'MA50', 'BB_Width', 'RSI', 'Momentum', 'ATR']
