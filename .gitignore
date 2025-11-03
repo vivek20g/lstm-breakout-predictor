@@ -1,0 +1,30 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+env/
+venv/
+build/
+dist/
+.eggs/
+*.egg-info/
+
+# Virtual environments
+venv/
+ENV/
+.env
+
+# IDEs
+.vscode/
+.idea/
+
+# Data & models
+scalers/
+model/daytrading_breakout_model.keras
+
+# OS files
+.DS_Store
+Thumbs.db
