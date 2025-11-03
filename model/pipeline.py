@@ -9,7 +9,7 @@ from model.evaluate_model import evaluate_model
 import tensorflow as tf
 
 
-class Trainer:
+class LSTMModelTrainer:
     """High-level trainer to run preprocessing -> train -> evaluate -> save."""
 
     def __init__(self, sequence_length: int):
