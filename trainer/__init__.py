@@ -1,7 +1,17 @@
 """
-trainer package — wrapper around the model training modules.
-Exposes a simple API: Trainer class that uses model.pipeline.LSTMModelTrainer
+model package - exposes model build, training and evaluation helpers.
 """
-from model.pipeline import LSTMModelTrainer as Trainer
+from .lstm_model import build_lstm_model
+from .train_model import prepare_sequences, compute_class_weights, train_model
+from .evaluate_model import evaluate_model
+from .pipeline import LSTMModelTrainer
 
-__all__ = ["Trainer"]
+__all__ = [
+    "build_lstm_model",
+    "prepare_sequences",
+    "compute_class_weights",
+    "train_model",
+    "evaluate_model",
+    "LSTMModelTrainer",
+]
+

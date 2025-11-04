@@ -29,7 +29,7 @@ class LSTMModelTrainer:
             metrics = ['accuracy']
         if self.model is None:
             raise RuntimeError('Model not built. Call build_model first.')
-        self.model.compile(optimizer=optimizer, loss=loss, metrics=metrics)
+        self.trainer.compile(optimizer=optimizer, loss=loss, metrics=metrics)
 
     def fit(self, Xp, Xi, Xt, y, class_weights: Optional[Dict]=None, **fit_kwargs):
         if self.model is None:
@@ -43,8 +43,9 @@ class LSTMModelTrainer:
             raise RuntimeError('Model not available for evaluation.')
         evaluate_model(self.model, Xp_val, Xi_val, Xt_val, y_val)
 
-    def save(self, path='model/daytrading_breakout_model.keras'):
+    def save(self, path='model/daytrading_breakout_trainer.keras'):
         if self.model is None:
             raise RuntimeError('No model to save.')
-        self.model.save(path)
+        self.trainer.save(path)
         return path
+

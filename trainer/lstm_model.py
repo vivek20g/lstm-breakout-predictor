@@ -1,4 +1,4 @@
-"""model/lstm_model.py
+"""model/lstm_trainer.py
 
 LSTM model factory for the pipeline.
 """
@@ -20,3 +20,4 @@ def build_lstm_model(sequence_length, price_dim, indicator_dim, time_dim):
     output = Dense(3, activation='softmax')(dense)
 
     return Model(inputs=[input_price, input_indicators, input_time], outputs=output)
+

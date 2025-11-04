@@ -49,3 +49,4 @@ def label_intraday_trade(df):
             labels.append(0)
     df['IntradayTradeIndicator'] = labels
     return df.dropna()
+

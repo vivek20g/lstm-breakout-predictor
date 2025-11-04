@@ -1,7 +1,7 @@
 """
-model/train_model.py
+model/train_trainer.py
 
-Utilities to prepare sequences and train the model.
+Utilities to prepare sequences and train the trainer.
 """
 
 import numpy as np
@@ -52,7 +52,7 @@ def train_model(model, Xp, Xi, Xt, y_train, class_weights):
         LearningRateScheduler(scheduler)
     ]
 
-    history = model.fit(
+    history = trainer.fit(
         [Xp, Xi, Xt],
         y_train,
         epochs=100,
@@ -62,3 +62,4 @@ def train_model(model, Xp, Xi, Xt, y_train, class_weights):
         callbacks=callbacks
     )
     return history
+
