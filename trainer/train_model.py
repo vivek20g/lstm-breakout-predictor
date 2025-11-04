@@ -6,6 +6,7 @@ Utilities to prepare sequences and train the trainer.
 
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.utils import class_weight
 import joblib
 import tensorflow as tf
 from tensorflow.keras.callbacks import EarlyStopping, LearningRateScheduler
@@ -35,9 +36,7 @@ def prepare_sequences(df, price_features, indicator_features, time_features, seq
 
     return np.array(Xp), np.array(Xi), np.array(Xt), tf.keras.utils.to_categorical(y, num_classes=3)
 
-
 def compute_class_weights(y_train):
-    from sklearn.utils import class_weight
     y_labels = np.argmax(y_train, axis=1)
     weights = class_weight.compute_class_weight('balanced', classes=np.unique(y_labels), y=y_labels)
     return dict(enumerate(weights))
@@ -62,4 +61,5 @@ def train_model(model, Xp, Xi, Xt, y_train, class_weights):
         callbacks=callbacks
     )
     return history
+
 

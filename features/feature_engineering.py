@@ -28,7 +28,8 @@ def add_technical_indicators(df):
     df['EMA_20'] = ta.trend.EMAIndicator(df['Close'], window=20).ema_indicator()
     bb = ta.volatility.BollingerBands(df['Close'], window=10, window_dev=2)
     df['BB_Width'] = bb.bollinger_wband()
-    macd = ta.trend.MACD(df['Close'])
+    # Use Open for MACD to capture early signals
+    macd = ta.trend.MACD(df['Open'])
     df['MACD'] = macd.macd()
     df['MACD_Signal'] = macd.macd_signal()
     df['GoldenCrossover'] = (df['MACD'] > df['MACD_Signal']).astype(int)
@@ -49,4 +50,5 @@ def label_intraday_trade(df):
             labels.append(0)
     df['IntradayTradeIndicator'] = labels
     return df.dropna()
+
 

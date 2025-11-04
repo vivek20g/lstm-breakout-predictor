@@ -4,7 +4,7 @@ import argparse
 import pandas as pd
 from simulator import generate_dataset
 from trainer import Trainer
-
+from features.engineer import FeatureEngineer
 
 def main():
     p = argparse.ArgumentParser()
@@ -26,7 +26,8 @@ def main():
         df = pd.read_csv(data_path)
         df = df.sort_values(by='ExecutionDate')
 
-        fe = __import__('features.engineer', fromlist=['FeatureEngineer']).FeatureEngineer()
+        #fe = __import__('features.engineer', fromlist=['FeatureEngineer']).FeatureEngineer()
+        fe = FeatureEngineer()
         df = fe.run(df)
 
         price_features = ['Entry_vs_PrevClose', 'EntryPriceChange', 'volatility']
@@ -50,4 +51,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 

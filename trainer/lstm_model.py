@@ -21,3 +21,4 @@ def build_lstm_model(sequence_length, price_dim, indicator_dim, time_dim):
 
     return Model(inputs=[input_price, input_indicators, input_time], outputs=output)
 
+

@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 
 def evaluate_model(model, Xp_val, Xi_val, Xt_val, y_val):
-    y_pred_probs = trainer.predict([Xp_val, Xi_val, Xt_val])
+    y_pred_probs = model.predict([Xp_val, Xi_val, Xt_val])
     y_pred = np.argmax(y_pred_probs, axis=1)
     y_true = np.argmax(y_val, axis=1)
 
@@ -22,4 +22,5 @@ def evaluate_model(model, Xp_val, Xi_val, Xt_val, y_val):
 
     report = classification_report(y_true, y_pred, target_names=["No Action", "Long Buy", "Short Sell"], zero_division=0)
     print(report)
+
 
