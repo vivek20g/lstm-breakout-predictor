@@ -4,6 +4,7 @@ simulator package — public API for data generation.
 from .trade_generator import load_stock_data, generate_trade_metadata, apply_technical_indicators, re_assign_trade_directions
 from .execution_price_simulator import generate_sample_execution_prices, calculate_trade_metrics
 from .cli import main as cli_main
+from .simulator import Simulator
 
 import os
 
@@ -47,7 +48,8 @@ def generate_dataset(excel_path, out_path, sheet_name=None):
 __all__ = [
     'generate_dataframe',
     'generate_dataset',
-    'cli_main'
+    'cli_main',
+    'Simulator'
 ]
 
 
