@@ -6,6 +6,8 @@ from .train_model import prepare_sequences, compute_class_weights, train_model
 from .evaluate_model import evaluate_model
 from .pipeline import LSTMModelTrainer
 
+Trainer = LSTMModelTrainer
+
 __all__ = [
     "build_lstm_model",
     "prepare_sequences",
@@ -13,5 +15,6 @@ __all__ = [
     "train_model",
     "evaluate_model",
     "LSTMModelTrainer",
+    "Trainer",
 ]
 
