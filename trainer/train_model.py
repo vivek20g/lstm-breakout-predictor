@@ -52,7 +52,7 @@ def train_model(model, Xp, Xi, Xt, y_train, class_weights):
         LearningRateScheduler(scheduler)
     ]
 
-    history = trainer.fit(
+    history = model.fit(
         [Xp, Xi, Xt],
         y_train,
         epochs=100,
