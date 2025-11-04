@@ -85,6 +85,3 @@ def re_assign_trade_directions(df_trades, df_stock_price):
 
     return df_trades
 
-
-# Provide a backwards-compatible alias
-insert_edit_into_file processed the file and saved it.
