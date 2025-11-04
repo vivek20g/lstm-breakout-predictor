@@ -1,72 +1,55 @@
 # lstm-breakout-predictor
 
-Lightweight pipeline to prepare intraday trading features, train an LSTM-based
-3-class breakout classifier (No Action / Long / Short), and evaluate results.
+Small monorepo that separates simulated data generation (simulator/) from model training (trainer/).
 
-Highlights
-- Feature engineering utilities in `features/feature_engineering.py`.
-- `FeatureEngineer` wrapper in `features/engineer.py` for a single-step transform.
-- Sequence preparation, scaling and training utilities in `model/`.
-- `model.LSTMModelTrainer` provides a compact API for preprocessing → training → evaluation → save.
+Summary
+- simulator/: produces synthetic execution logs from historical price Excel and spread matrices. Writes output Excel (with metadata) to `simulator/output/`.
+- trainer/: model training pipeline based on an LSTM. Provides `train_from_file` helper to train from a CSV/XLSX produced by the simulator.
+- features/: feature engineering utilities used before training.
+- main.py: simple orchestrator to run generation and/or training from the repo root.
 
 Quick start
+1. Create a virtual environment and install dependencies
 
-1. Create and activate a virtual environment and install dependencies:
+   python -m venv .venv; .\.venv\Scripts\Activate.ps1; python -m pip install -r requirements.txt
 
-   pip install -r requirements.txt
+2. Generate simulated data (default reads `simulator/data/NiftyPrice.xlsx`)
 
-2. Prepare your data
+   python main.py --generate
 
-   Place your execution log (Excel/CSV) in `data/`. Expected columns include:
-   `EntryPrice, ExitPrice, Open, High, Low, Close, MarketVolume, ExecutionDate, ProfitLoss, TradeDirection`.
+   Output: `simulator/output/simulated_trades.xlsx` and metadata `simulator/output/simulated_trades.xlsx.meta.json`.
 
-3. Run the example pipeline
+3. Train the model on the generated dataset
 
-   python main.py
+   python main.py --train
 
-   This will run feature engineering (via `FeatureEngineer`), prepare sequences (scalers saved to `scalers/`), train an LSTM, evaluate and save the model to `model/daytrading_breakout_model.keras`.
+   The trainer loads the dataset, runs feature engineering, prepares sequences, trains the LSTM and saves the model under `trainer/` defaults.
 
-API (recommended usage)
-
-- High-level programmatic flow:
+Programmatic usage
+- Generate dataset from code
 
 ```py
-from features import FeatureEngineer
-from model import LSTMModelTrainer
-
-fe = FeatureEngineer()
-df = fe.run(df)
-
-price_features = ['Entry_vs_PrevClose', 'EntryPriceChange', 'volatility']
-indicator_features = ['EMA_10', 'EMA_20', 'MA50', 'BB_Width', 'RSI', 'Momentum', 'ATR']
-time_features = ['HourOfDay', 'OrderMonth', 'GoldenCrossover']
-
-trainer = LSTMModelTrainer(sequence_length=9)
-Xp, Xi, Xt, y = trainer.preprocess(df, price_features, indicator_features, time_features)
-trainer.build_model(len(price_features), len(indicator_features), len(time_features))
-trainer.compile()
-trainer.fit(Xp, Xi, Xt, y)
-trainer.save()
+from simulator import generate_dataset
+generate_dataset('simulator/data/NiftyPrice.xlsx', 'simulator/output/simulated_trades.xlsx')
 ```
 
-- Low-level helpers remain available for more control in `features` and `model` packages.
+- Train from a dataset file
 
-Notes
-- `prepare_sequences` persists `MinMaxScaler` objects to `scalers/` — reuse them at inference to preserve scaling.
-- Rolling indicators create NaNs at the start of series — ensure data is cleaned (`dropna()`) before training.
-- `label_intraday_trade` uses a simple profit-based rule: positive `ProfitLoss` -> label 1 (LONG) or 2 (SHORT); otherwise 0. Adjust the logic to match your business rules.
+```py
+from trainer.train_from_file import train_from_file
+train_from_file('simulator/output/simulated_trades.xlsx')
+```
 
-Repository files of interest
-- `main.py` — example script using `FeatureEngineer` + `LSTMModelTrainer`.
-- `features/feature_engineering.py` — individual feature functions.
-- `features/engineer.py` — FeatureEngineer wrapper.
-- `model/` — model factory, training utilities, evaluation and pipeline.
+Notes and conventions
+- Simulator writes an accompanying `.meta.json` with creation timestamp, source, seed and row count for reproducibility.
+- Trainer and features are decoupled: trainer expects a file path (CSV/XLSX). This makes it easy to iterate on the simulator without changing training code.
+- Keep `simulator/data/` for small example inputs (spread matrices, price Excel). For large datasets, store externally and update paths.
 
-Contributing
-- PRs welcome. Keep changes small and add tests where appropriate.
+Where to look in the repo
+- `simulator/` — generation code, CLI and example data
+- `trainer/` — LSTM model, training utilities and `train_from_file.py` helper
+- `features/` — feature engineering
+- `main.py` — orchestrator that composes simulator + trainer
 
 License
-- MIT (see `LICENSE`).
-
-Repository
-- https://github.com/vivek20g/lstm-breakout-predictor
+- MIT
