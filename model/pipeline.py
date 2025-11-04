@@ -3,9 +3,9 @@
 Trainer pipeline that encapsulates preprocessing, training and saving.
 """
 from typing import Optional, Dict
-from model.train_model import prepare_sequences, compute_class_weights, train_model
-from model.lstm_model import build_lstm_model
-from model.evaluate_model import evaluate_model
+from trainer.train_model import prepare_sequences, compute_class_weights, train_model
+from trainer.lstm_model import build_lstm_model
+from trainer.evaluate_model import evaluate_model
 import tensorflow as tf
 
 
