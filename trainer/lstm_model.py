@@ -4,7 +4,7 @@ LSTM model factory for the pipeline.
 """
 
 from tensorflow.keras.layers import Input, LSTM, Dense, Concatenate
-from tensorflow.keras.models import trainer
+from tensorflow.keras.models import Model
 
 
 def build_lstm_model(sequence_length, price_dim, indicator_dim, time_dim):

@@ -55,7 +55,7 @@ def generate_trade_metadata(df_stock_price):
         'ProfitLoss': [None] * len(df_stock_price),
         'ClientDematId': ['123'] * len(df_stock_price)
     })
-    df_trades = re_assign_trade_directions(df_trades, df_stock_price)
+    
     return df_trades
 
 

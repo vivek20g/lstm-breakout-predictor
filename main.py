@@ -9,11 +9,11 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('--generate', action='store_true')
     p.add_argument('--train', action='store_true')
-    p.add_argument('--excel', default='simulator/data/NiftyPrice.xlsx')
+    p.add_argument('--excel', default='simulator/data/NiftyPriceHistory.xlsx')
     p.add_argument('--sheet', default='HDFCBANK')
     p.add_argument('--out', default='simulator/output/simulated_trades.xlsx')
     args = p.parse_args()
-
+    print('args:',args)
     data_path = args.out
 
     if args.generate:

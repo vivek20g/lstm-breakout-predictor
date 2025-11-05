@@ -18,8 +18,14 @@ def generate_dataframe(excel_path, sheet_name=None):
         sheet_name = 0
     df_stock = load_stock_data(excel_path, sheet_name)
     df_trades = generate_trade_metadata(df_stock)
+    
+    # The following will update the trade directions based on technical indicators RSI & GoldenCrossover- 
+    # based on heuristics to make it more realistic and less random
+    # will create profits. the rationale being that real traders wil look at
+    # technical indicators before placing trades.
     df_trades = apply_technical_indicators(df_trades)
-
+    df_trades = re_assign_trade_directions(df_trades, df_stock)
+    
     # calculate volatility if not present
     if 'volatility' not in df_trades.columns:
         df_trades['volatility'] = round(df_trades['EntryPrice'].rolling(window=10).std(), 2)
