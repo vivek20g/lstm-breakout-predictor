@@ -25,6 +25,7 @@ def generate_dataframe(excel_path, sheet_name=None):
     # technical indicators before placing trades.
     df_trades = apply_technical_indicators(df_trades)
     df_trades = re_assign_trade_directions(df_trades, df_stock)
+    df_trades.drop(columns=['RSI','MACD','MACD_Signal','GoldenCrossover'], inplace=True)
     
     # calculate volatility if not present
     if 'volatility' not in df_trades.columns:

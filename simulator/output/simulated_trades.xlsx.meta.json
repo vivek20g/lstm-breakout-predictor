@@ -1,7 +1,0 @@
-{
-  "created_at": "2025-11-05T09:40:02.181216Z",
-  "source_excel": "simulator/data/NiftyPriceHistory.xlsx",
-  "sheet": "HDFCBANK",
-  "seed": null,
-  "rows": 500
-}
