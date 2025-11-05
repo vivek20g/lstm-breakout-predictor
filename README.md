@@ -11,7 +11,20 @@ Summary
 Quick start
 1. Create a virtual environment and install dependencies
 
-   python -m venv .venv; .\.venv\Scripts\Activate.ps1; python -m pip install -r requirements.txt
+   **Step 1:** Create a virtual environment
+   ```
+   python -m venv .venv
+   ```
+
+   **Step 2:** Activate the virtual environment
+   ```
+   .\.venv\Scripts\Activate.ps1
+   ```
+
+   **Step 3:** Install required dependencies
+   ```
+   python -m pip install -r requirements.txt
+   ```
 
 2. Generate simulated data (default reads `simulator/data/NiftyPrice.xlsx`)
 
