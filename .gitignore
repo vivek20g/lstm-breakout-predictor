@@ -24,6 +24,7 @@ ENV/
 # Data & models
 scalers/
 model/daytrading_breakout_model.keras
+model/classification_report.txt
 
 # OS files
 .DS_Store

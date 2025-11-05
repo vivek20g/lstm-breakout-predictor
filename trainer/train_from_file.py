@@ -16,6 +16,7 @@ def train_from_file(path, sequence_length=9):
 
     df = df.sort_values(by='ExecutionDate')
 
+    # Feature engineering to prepare price, indicator, time features in a pandas DataFrame
     fe = FeatureEngineer()
     df = fe.run(df)
 
