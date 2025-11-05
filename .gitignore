@@ -28,3 +28,6 @@ model/daytrading_breakout_model.keras
 # OS files
 .DS_Store
 Thumbs.db
+
+#workspace
+lstm-breakout-predictor.code-workspace
