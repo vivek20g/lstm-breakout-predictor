@@ -7,7 +7,7 @@ trades based on trade direction, hour of day and order month.
 """
 
 import pandas as pd
-
+import os
 
 def build_matrix_dict(df):
     col_keys = df.columns[1:]
@@ -25,8 +25,11 @@ def build_matrix_dict(df):
 
 
 def get_buy_sell_spread(trade_direction, hour_of_day, order_month):
-    xls = pd.read_excel("simulator/data/Buy-Sell-Spread-Matrix.xlsx", sheet_name=None, engine='openpyxl')
-
+    base_dir = os.path.dirname(__file__)
+    file_path = os.path.join(base_dir, "data", "Buy-Sell-Spread-Matrix.xlsx")
+    #xls = pd.read_excel("simulator/data/Buy-Sell-Spread-Matrix.xlsx", sheet_name=None, engine='openpyxl')
+    xls = pd.read_excel(file_path, sheet_name=None, engine='openpyxl')
+    
     sell_low = build_matrix_dict(xls['sell_low'])
     sell_high = build_matrix_dict(xls['sell_high'])
     buy_low = build_matrix_dict(xls['buy_low'])
