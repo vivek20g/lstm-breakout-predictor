@@ -14,7 +14,8 @@ class LSTMModelTrainer:
 
     def __init__(self, sequence_length: int):
         self.sequence_length = sequence_length
-        self.model: Optional[tf.keras.Model] = None
+        #self.model: Optional[tf.keras.Model] = None
+        self.model = None
 
     def preprocess(self, df, price_features, indicator_features, time_features):
         """Scale and build sequences. Scalers are saved by prepare_sequences."""
