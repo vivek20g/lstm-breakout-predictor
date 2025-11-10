@@ -53,19 +53,3 @@ train_from_file("simulator/output/simulated_trades.xlsx")
 
 The trained model can be used for real-time breakout signal generation.
 
-```mermaid
-flowchart TD
-    A[Input Sequence (Input Size: 10)] --> B[LSTM Layer 1 | Hidden Size: 128 | Activation: tanh]
-    B --> C[LSTM Layer 2 | Hidden Size: 128 | Activation: tanh]
-    C --> D[LSTM Layer 3 | Hidden Size: 128 | Activation: tanh]
-    D --> E[Fully Connected | Output Size: 1 | Activation: ReLU/Sigmoid]
-    E --> F[Output]
-
-    subgraph G[LSTM Internal Gates]
-        G1[Forget Gate (f) | Activation: sigmoid]
-        G2[Input Gate (i) | Activation: sigmoid]
-        G3[Cell State (c) | Activation: tanh]
-        G4[Output Gate (o) | Activation: sigmoid]
-    end
-
-    B --- G
