@@ -5,7 +5,7 @@ from . import generate_dataset
 
 def main():
     p = argparse.ArgumentParser(description='Simulator CLI')
-    p.add_argument('--excel', default='simulator/data/NiftyPrice.xlsx', help='Input excel with price data')
+    p.add_argument('--excel', default='simulator/data/NiftyPriceHistory.xlsx', help='Input excel with price data')
     p.add_argument('--out', default='simulator/output/simulated_trades.csv', help='Output CSV path')
     p.add_argument('--sheet', default='HDFCBANK', help='Excel sheet name/index')
     args = p.parse_args()
