@@ -53,3 +53,4 @@ train_from_file("simulator/output/simulated_trades.xlsx")
 
 The trained model can be used for real-time breakout signal generation.
 
+![LSTM Architecture](LSTM-Architecture.png)
